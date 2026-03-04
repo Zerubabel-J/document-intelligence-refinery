@@ -1,0 +1,30 @@
+{
+  "doc_id": "b2c3d4e5f6a7b2c3d4e5f6a7b2c3d4e5f6a7b2c3d4e5f6a7b2c3d4e5f6a7b2c3",
+  "doc_name": "MoF_Proclamation_Financial_Admin_2023.pdf",
+  "doc_path": "data/MoF_Proclamation_Financial_Admin_2023.pdf",
+  "page_count": 42,
+  "origin_type": "scanned_image",
+  "layout_complexity": "single_column",
+  "language": {
+    "language_code": "am",
+    "confidence": 0.71,
+    "secondary_language": "en"
+  },
+  "domain_hint": "legal",
+  "estimated_extraction_cost": "needs_vision_model",
+  "signals": {
+    "avg_chars_per_page": 18.4,
+    "avg_char_density": 0.0000367,
+    "image_area_ratio": 0.94,
+    "table_count_estimate": 0,
+    "figure_count_estimate": 42,
+    "font_count": 0,
+    "has_embedded_text": false,
+    "has_form_fields": false,
+    "pages_sampled": 5
+  },
+  "domain_keywords_matched": [],
+  "triage_version": "1.0.0",
+  "created_at": "2026-03-04T19:55:17.900050",
+  "notes": null
+}

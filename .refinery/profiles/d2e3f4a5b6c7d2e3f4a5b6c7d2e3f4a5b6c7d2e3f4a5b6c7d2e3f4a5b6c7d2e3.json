@@ -1,0 +1,37 @@
+{
+  "doc_id": "d2e3f4a5b6c7d2e3f4a5b6c7d2e3f4a5b6c7d2e3f4a5b6c7d2e3f4a5b6c7d2e3",
+  "doc_name": "Ethiopia_Public_Debt_Stats_2022.pdf",
+  "doc_path": "data/Ethiopia_Public_Debt_Stats_2022.pdf",
+  "page_count": 45,
+  "origin_type": "native_digital",
+  "layout_complexity": "table_heavy",
+  "language": {
+    "language_code": "en",
+    "confidence": 0.97,
+    "secondary_language": null
+  },
+  "domain_hint": "financial",
+  "estimated_extraction_cost": "needs_layout_model",
+  "signals": {
+    "avg_chars_per_page": 743.8,
+    "avg_char_density": 0.00148,
+    "image_area_ratio": 0.06,
+    "table_count_estimate": 14,
+    "figure_count_estimate": 2,
+    "font_count": 4,
+    "has_embedded_text": true,
+    "has_form_fields": false,
+    "pages_sampled": 5
+  },
+  "domain_keywords_matched": [
+    "revenue",
+    "expenditure",
+    "budget",
+    "deficit",
+    "assets",
+    "liabilities"
+  ],
+  "triage_version": "1.0.0",
+  "created_at": "2026-03-04T19:55:17.900570",
+  "notes": null
+}

@@ -1,0 +1,38 @@
+{
+  "doc_id": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "doc_name": "CBE_Annual_Report_2023-24.pdf",
+  "doc_path": "data/CBE_Annual_Report_2023-24.pdf",
+  "page_count": 148,
+  "origin_type": "native_digital",
+  "layout_complexity": "table_heavy",
+  "language": {
+    "language_code": "en",
+    "confidence": 0.92,
+    "secondary_language": "am"
+  },
+  "domain_hint": "financial",
+  "estimated_extraction_cost": "needs_layout_model",
+  "signals": {
+    "avg_chars_per_page": 1847.3,
+    "avg_char_density": 0.00368,
+    "image_area_ratio": 0.08,
+    "table_count_estimate": 12,
+    "figure_count_estimate": 3,
+    "font_count": 7,
+    "has_embedded_text": true,
+    "has_form_fields": false,
+    "pages_sampled": 5
+  },
+  "domain_keywords_matched": [
+    "annual report",
+    "revenue",
+    "assets",
+    "liabilities",
+    "fiscal",
+    "audit",
+    "balance sheet"
+  ],
+  "triage_version": "1.0.0",
+  "created_at": "2026-03-04T19:55:17.899040",
+  "notes": null
+}

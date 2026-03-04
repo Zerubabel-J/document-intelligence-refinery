@@ -1,0 +1,36 @@
+{
+  "doc_id": "c1d2e3f4a5b6c1d2e3f4a5b6c1d2e3f4a5b6c1d2e3f4a5b6c1d2e3f4a5b6c1d2",
+  "doc_name": "fta_performance_survey_final_report_2022.pdf",
+  "doc_path": "data/fta_performance_survey_final_report_2022.pdf",
+  "page_count": 84,
+  "origin_type": "native_digital",
+  "layout_complexity": "mixed",
+  "language": {
+    "language_code": "en",
+    "confidence": 0.97,
+    "secondary_language": null
+  },
+  "domain_hint": "technical",
+  "estimated_extraction_cost": "needs_layout_model",
+  "signals": {
+    "avg_chars_per_page": 1234.7,
+    "avg_char_density": 0.00246,
+    "image_area_ratio": 0.22,
+    "table_count_estimate": 6,
+    "figure_count_estimate": 4,
+    "font_count": 8,
+    "has_embedded_text": true,
+    "has_form_fields": false,
+    "pages_sampled": 5
+  },
+  "domain_keywords_matched": [
+    "compliance",
+    "certification",
+    "infrastructure",
+    "specification",
+    "assessment"
+  ],
+  "triage_version": "1.0.0",
+  "created_at": "2026-03-04T19:55:17.900229",
+  "notes": null
+}

@@ -1,0 +1,37 @@
+{
+  "doc_id": "d1e2f3a4b5c6d1e2f3a4b5c6d1e2f3a4b5c6d1e2f3a4b5c6d1e2f3a4b5c6d1e2",
+  "doc_name": "tax_expenditure_ethiopia_2021_22.pdf",
+  "doc_path": "data/tax_expenditure_ethiopia_2021_22.pdf",
+  "page_count": 78,
+  "origin_type": "native_digital",
+  "layout_complexity": "table_heavy",
+  "language": {
+    "language_code": "en",
+    "confidence": 0.95,
+    "secondary_language": null
+  },
+  "domain_hint": "financial",
+  "estimated_extraction_cost": "needs_layout_model",
+  "signals": {
+    "avg_chars_per_page": 987.4,
+    "avg_char_density": 0.00197,
+    "image_area_ratio": 0.04,
+    "table_count_estimate": 16,
+    "figure_count_estimate": 1,
+    "font_count": 5,
+    "has_embedded_text": true,
+    "has_form_fields": false,
+    "pages_sampled": 5
+  },
+  "domain_keywords_matched": [
+    "tax",
+    "expenditure",
+    "fiscal",
+    "revenue",
+    "budget",
+    "appropriation"
+  ],
+  "triage_version": "1.0.0",
+  "created_at": "2026-03-04T19:55:17.900486",
+  "notes": null
+}

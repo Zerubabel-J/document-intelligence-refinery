@@ -1,0 +1,37 @@
+{
+  "doc_id": "a3b4c5d6e7f8a3b4c5d6e7f8a3b4c5d6e7f8a3b4c5d6e7f8a3b4c5d6e7f8a3b4",
+  "doc_name": "Awash_Bank_Annual_Report_2023.pdf",
+  "doc_path": "data/Awash_Bank_Annual_Report_2023.pdf",
+  "page_count": 96,
+  "origin_type": "native_digital",
+  "layout_complexity": "table_heavy",
+  "language": {
+    "language_code": "en",
+    "confidence": 0.94,
+    "secondary_language": null
+  },
+  "domain_hint": "financial",
+  "estimated_extraction_cost": "needs_layout_model",
+  "signals": {
+    "avg_chars_per_page": 1621.4,
+    "avg_char_density": 0.00323,
+    "image_area_ratio": 0.15,
+    "table_count_estimate": 9,
+    "figure_count_estimate": 2,
+    "font_count": 6,
+    "has_embedded_text": true,
+    "has_form_fields": false,
+    "pages_sampled": 5
+  },
+  "domain_keywords_matched": [
+    "income statement",
+    "tax",
+    "assets",
+    "equity",
+    "budget",
+    "expenditure"
+  ],
+  "triage_version": "1.0.0",
+  "created_at": "2026-03-04T19:55:17.899744",
+  "notes": null
+}
