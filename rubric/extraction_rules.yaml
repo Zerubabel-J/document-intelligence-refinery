@@ -1,0 +1,194 @@
+# ============================================================================
+# extraction_rules.yaml — The Document Intelligence Refinery
+# ============================================================================
+#
+# This file is the single source of truth for all thresholds, cost matrices,
+# and chunking rules used across the pipeline.
+#
+# FDE Readiness requirement: a new document domain can be onboarded by
+# modifying ONLY this file — no code changes required.
+#
+# Last updated: 2026-03-04
+# ============================================================================
+
+# ── Triage Agent thresholds ──────────────────────────────────────────────────
+triage:
+  # Minimum average character count per page for a page to be considered
+  # "digitally born" (has a meaningful character stream).
+  # Empirical baseline: CBE Annual Report averages ~1,800 chars/page.
+  # Scanned pages (DBE Audit Report) average < 5 chars/page.
+  min_chars_per_page_digital: 100
+
+  # Characters per PDF point² — density normalises for different page sizes.
+  # A4 page ≈ 595×842 pt = 501,190 pt². Threshold 0.001 = ~500 chars/page.
+  min_char_density_digital: 0.001
+
+  # If image area exceeds this fraction of page area AND char count is below
+  # min_chars_per_page_digital, the page is classified as scanned.
+  # Threshold chosen so embedded logos (< 5% area) don't trigger misclassification.
+  max_image_area_ratio_digital: 0.50
+
+  # Minimum number of table-like regions per sampled pages to classify
+  # layout as "table_heavy".
+  table_count_threshold_heavy: 5
+
+  # Minimum number of figure/image bounding boxes per sampled pages to
+  # classify layout as "figure_heavy".
+  figure_count_threshold_heavy: 4
+
+  # Number of pages sampled during triage. Sampling is evenly spaced
+  # across the document. Higher values → better accuracy, slower triage.
+  pages_to_sample: 5
+
+  # Font family count heuristic for multi-column detection.
+  # Multi-column academic / financial reports typically use ≥ 6 distinct fonts.
+  multi_column_font_threshold: 6
+
+# ── Strategy A: Fast Text (pdfplumber) ───────────────────────────────────────
+strategy_a:
+  # Confidence below this threshold triggers automatic escalation to Strategy B.
+  # Justified: a 0.60 score means the page has fewer than ~300 chars/page or
+  # >50% image coverage — text extraction is likely incomplete.
+  confidence_threshold: 0.60
+
+  # Minimum character count for a page to receive a non-zero char_count_score.
+  # Pages with fewer chars than this contribute a reduced confidence signal.
+  min_chars_per_page: 100
+
+  # Character density threshold (chars/pt²) below which the density signal
+  # contributes minimally to confidence.
+  min_char_density: 0.001
+
+  # Image area ratio above which the image_score is penalised.
+  # If images cover > 50% of the page, text extraction is unreliable.
+  max_image_area_ratio: 0.50
+
+  # Confidence score signal weights (must sum to 1.0):
+  #   char_count_weight: contribution of normalised character count
+  #   density_weight:    contribution of character density per pt²
+  #   image_weight:      contribution of inverted image area ratio
+  confidence_weights:
+    char_count: 0.40
+    density: 0.30
+    image_score: 0.30
+
+  # Document-level confidence is a weighted combination of page-level scores.
+  # Mean is weighted 70%, minimum is weighted 30% to penalise worst-case pages.
+  doc_confidence_weights:
+    mean: 0.70
+    minimum: 0.30
+
+# ── Strategy B: Layout-Aware (Docling / MinerU) ───────────────────────────────
+strategy_b:
+  # Confidence below this triggers escalation to Strategy C.
+  # Strategy B is less sensitive than A because layout models are more robust.
+  confidence_threshold: 0.55
+
+  # Minimum fraction of extracted tables that must have a non-empty header row
+  # for table extraction to be considered high quality.
+  table_confidence_floor: 0.70
+
+  # If Docling is unavailable, fall back to an enhanced pdfplumber extraction.
+  # The fallback degrades confidence by this factor.
+  fallback_confidence_penalty: 0.15
+
+  # Maximum table cell count before Docling is considered to have failed
+  # (very large tables may OOM — cap at this value and warn).
+  max_table_cells: 5000
+
+# ── Strategy C: Vision-Augmented (Gemini Flash via OpenRouter) ───────────────
+strategy_c:
+  # Strategy C is the final fallback — escalate is always False after C.
+  confidence_threshold: 0.50
+
+  # Per-document API spend hard cap. Processing stops gracefully at this limit.
+  # At Gemini Flash pricing (~$0.00035/1k input tokens), $0.10 ≈ 285k tokens.
+  # A 50-page scanned PDF with 150 DPI images ≈ $0.05–$0.08.
+  budget_cap_usd: 0.10
+
+  # OpenRouter model identifier. Budget-aware selection:
+  #   google/gemini-flash-1.5  — best cost/quality for structured extraction
+  #   openai/gpt-4o-mini       — fallback if Gemini is unavailable
+  model: "google/gemini-flash-1.5"
+
+  # Approximate pricing (USD per 1,000 tokens) — used for cost estimation.
+  # Update these values if pricing changes.
+  cost_per_1k_input_tokens: 0.00035
+  cost_per_1k_output_tokens: 0.00105
+
+  # Page rasterisation DPI. Higher DPI → better OCR accuracy, larger images.
+  # 150 DPI is a good balance for A4 documents (1240×1754 px per page).
+  dpi: 150
+
+  # Maximum pages processed per document (safety cap for budget and time).
+  max_pages_per_doc: 50
+
+# ── Cost matrix — (origin_type, layout_complexity) → extraction_cost ─────────
+# This matrix documents the ExtractionRouter's routing decisions explicitly
+# so domain engineers can adjust them without touching Python code.
+# NOTE: Code still implements the same logic — this section is documentation.
+cost_matrix:
+  native_digital:
+    single_column: fast_text_sufficient
+    multi_column: needs_layout_model
+    table_heavy: needs_layout_model
+    figure_heavy: needs_layout_model
+    mixed: needs_layout_model
+  scanned_image:
+    any: needs_vision_model
+  mixed:
+    any: needs_layout_model
+  form_fillable:
+    any: fast_text_sufficient
+
+# ── Chunking constitution (Stage 3 — for reference at interim) ───────────────
+# Full enforcement implemented in src/agents/chunker.py (final submission).
+chunking:
+  # Maximum token count for a single LDU before mandatory splitting.
+  max_tokens_per_chunk: 512
+
+  # Minimum token count — chunks below this are merged with adjacent blocks.
+  min_tokens_per_chunk: 32
+
+  # Token counting model — use tiktoken cl100k_base for OpenAI compatibility.
+  tokenizer: "cl100k_base"
+
+  rules:
+    # Rule 1: table cells are never split from their header row.
+    preserve_table_headers: true
+
+    # Rule 2: figure caption is stored as metadata of its parent figure chunk.
+    figure_caption_as_metadata: true
+
+    # Rule 3: a numbered list is kept as a single LDU unless > max_tokens.
+    preserve_lists: true
+
+    # Rule 4: section headers are propagated to child chunks as parent_section.
+    propagate_section_headers: true
+
+    # Rule 5: cross-references ("see Table 3") are resolved to chunk relationships.
+    resolve_cross_references: true
+
+# ── Provenance & audit settings ───────────────────────────────────────────────
+provenance:
+  # Content hash algorithm — SHA-256 matches Week 1's spatial hashing pattern.
+  hash_algorithm: sha256
+
+  # Maximum characters in the ProvenanceRecord.excerpt field.
+  excerpt_max_chars: 200
+
+  # Whether to store bounding boxes in the provenance record.
+  # Disable only if pdfplumber bbox extraction is unreliable for a corpus.
+  include_bounding_boxes: true
+
+# ── Ledger settings ───────────────────────────────────────────────────────────
+ledger:
+  path: ".refinery/extraction_ledger.jsonl"
+  max_warnings_per_entry: 10
+
+# ── Vector store (Stage 3) ────────────────────────────────────────────────────
+vector_store:
+  backend: "chromadb"   # chromadb | faiss
+  collection_name: "document_intelligence_refinery"
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  persist_directory: ".refinery/vectorstore"
